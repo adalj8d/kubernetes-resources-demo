@@ -1,0 +1,39 @@
+#Con request y limit de CPU y memoria iguales
+#QoS: Guaranteed
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: montecarlo1
+  labels:
+    app: montecarlo1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: montecarlo1
+  template:
+    metadata:
+      labels:
+        app: montecarlo1
+    spec:
+      containers:
+        - name: montecarlo1
+          image: adalj8d/demo-limits:1.0.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NUM_SIMULACIONES
+              value: "250000000"
+            - name: MEM_MB
+              value: "10"
+            - name: NUM_THREADS
+              value: "5"
+            - name: DURATION_SECS
+              value: "300"
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "254Mi"
+            limits:
+              cpu: "500m"
+              memory: "254Mi"

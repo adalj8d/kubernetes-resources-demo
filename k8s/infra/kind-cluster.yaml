@@ -1,0 +1,15 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: demo-cluster
+nodes:
+  - role: control-plane
+    image: kindest/node:v1.34.0 # Utilizar una versión específica para las pruebas.
+    extraPortMappings:
+      - containerPort: 30900 # Prometheus NodePort
+        hostPort: 9090       # acceso desde tu máquina: localhost:9090
+        protocol: TCP
+      - containerPort: 30300 # Grafana NodePort
+        hostPort: 3000       # acceso desde tu máquina: localhost:3000
+        protocol: TCP
+  - role: worker
+  #- role: worker

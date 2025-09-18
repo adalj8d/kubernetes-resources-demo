@@ -1,0 +1,39 @@
+#Con request y limit de CPU y memoria iguales
+#QoS: Burstable
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: montecarlo4
+  labels:
+    app: montecarlo4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: montecarlo4
+  template:
+    metadata:
+      labels:
+        app: montecarlo4
+    spec:
+      containers:
+        - name: montecarlo4
+          image: adalj8d/demo-limits:1.0.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NUM_SIMULACIONES
+              value: "250000000"
+            - name: MEM_MB
+              value: "10"
+            - name: NUM_THREADS
+              value: "5"
+            - name: DURATION_SECS
+              value: "300"
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "254Mi"
+            limits:
+              cpu: "800m"
+              memory: "512Mi"

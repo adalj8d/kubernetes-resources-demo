@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: montecarlo-servicemonitor
+  labels:
+    app: montecarlo
+spec:
+  selector:
+    matchLabels:
+      app: montecarlo
+  namespaceSelector:
+    matchNames:
+      - demo-limits
+  endpoints:
+    - port: "8080"
+      path: /actuator/prometheus
+      interval: 5s
+      scheme: http

@@ -1,0 +1,32 @@
+#Sin resources, sin limits
+#QoS: BestEffort
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: montecarlo0
+  labels:
+    app: montecarlo0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: montecarlo0
+  template:
+    metadata:
+      labels:
+        app: montecarlo0
+    spec:
+      containers:
+        - name: montecarlo0
+          image: adalj8d/demo-limits:1.0.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NUM_SIMULACIONES
+              value: "250000000"
+            - name: MEM_MB
+              value: "10"
+            - name: NUM_THREADS
+              value: "5"
+            - name: DURATION_SECS
+              value: "300"
