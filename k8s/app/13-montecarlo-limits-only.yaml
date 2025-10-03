@@ -32,5 +32,5 @@ spec:
               value: "300"
           resources:
             limits:
-              cpu: "500m"
-              memory: "254Mi"
+              cpu: "800m"
+              memory: "384Mi"

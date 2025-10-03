@@ -1,0 +1,21 @@
+#Kustomization para desplegar Metrics Server con un parche
+#que añade argumentos adicionales al contenedor del servidor de métricas.
+#Esto es útil para entornos donde el servidor de métricas (como en cluster locales)
+#con certificados autofirmados!!
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  # Importa el manifiesto oficial remoto de SIGs Metrics Server
+  - https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+#Parche para añadir argumentos al contenedor del servidor de métricas
+patches:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: metrics-server
+      namespace: kube-system
+    path: patch-args.json

@@ -1,0 +1,24 @@
+#https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: high-priority
+value: 1000
+globalDefault: false
+description: "This priority class should be used for critical system components or business-critical applications."
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: medium-priority
+value: 500
+globalDefault: false
+description: "This priority class is for important applications that are not business-critical but require stable performance."
+---
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: low-priority
+value: 100
+globalDefault: false
+description: "This priority class is for non-critical applications that can tolerate delays or interruptions."

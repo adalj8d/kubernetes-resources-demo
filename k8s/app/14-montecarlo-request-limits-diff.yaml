@@ -16,6 +16,7 @@ spec:
       labels:
         app: montecarlo4
     spec:
+      priorityClassName: high-priority
       containers:
         - name: montecarlo4
           image: adalj8d/demo-limits:1.0.0
