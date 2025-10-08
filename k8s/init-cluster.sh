@@ -41,8 +41,26 @@ kubectl wait --for=condition=Ready pods --all -n "$ns_monitoring" --timeout=180s
   echo -e "\n\n⚠️  Algunos pods no se iniciaron. Verificar con: kubectl get pods -n $ns_monitoring"
 }
 
+#AGREGA CONDICION PARA VERIFICAR SI LA IMAGEN EXISTE LOCALMENTE
+echo -e "\n🔍 Verificando si la imagen Docker $image existe localmente..."
+
+if [[ "$(docker images -q $image 2> /dev/null)" == "" ]]; then
+  docker pull $image || {
+    echo -e "\n\n❌ Error: La imagen $image no existe localmente y no se pudo descargar. Verificar el nombre de la imagen correcta"
+    exit 1
+  }
+fi
+
 echo -e "\n\n⤴️ Cargando imagen Docker en el clúster KinD..."
-kind load docker-image $image --name $cluster_name
+kind load docker-image $image --name $cluster_name || {
+  echo -e "\n\n❌ Error cargando la imagen $image en el clúster KinD. Verificar que la imagen exista localmente con 'docker images'. o tener acceso desde el cluster a docker hub"
+}
+
+echo -e "\n\n📦 Desplegando service monitor \n"
+kubectl apply -f infra/montecarlo-service.yaml -f infra/montecarlo-servicemonitor.yaml
+
+echo -e "\n\n📦 Creando priority classes \n"
+kubectl apply -f app/01-priority-classes.yaml
 
 echo -e "\n✅ Clúster inicializado correctamente.\n\n"
 echo "👉 Prometheus disponible en NodePort 30900, accesible a traves de KinD http://localhost:9090"

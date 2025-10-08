@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: montecarlo5
+  labels:
+    app: montecarlo5
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: montecarlo5
+  template:
+    metadata:
+      labels:
+        app: montecarlo5
+    spec:
+      priorityClassName: medium-priority
+      containers:
+        - name: montecarlo5
+          image: adalj8d/demo-limits:1.0.0
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NUM_SIMULACIONES
+              value: "50000000"
+            - name: MEM_MB
+              value: "8"
+            - name: NUM_THREADS
+              value: "50"
+            - name: DURATION_SECS
+              value: "300"
+            # Fuerza el heap máximo al límite del contenedor (512Mi)
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Xmx460m -Xms300m -XX:+UseContainerSupport -XX:+AlwaysPreTouch -XX:+ExitOnOutOfMemoryError"
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "254Mi"
+            limits:
+              cpu: "800m"
+              memory: "512Mi"

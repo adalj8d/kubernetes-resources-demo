@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Random;
+import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
 @SpringBootApplication
@@ -17,8 +18,11 @@ public class LimitsdemoApplication {
 	private static final Logger logger = LoggerFactory.getLogger(LimitsdemoApplication.class);
 
 	public static void main(String[] args) {
+		System.out.println("Version con memory leak y CPU load");
 		SpringApplication.run(LimitsdemoApplication.class, args);
 	}
+
+	private static final Vector<byte[][]> memoryLeak = new Vector<>();
 
 	@Bean
 	public CommandLineRunner monteCarloRunner(MeterRegistry registry) {
@@ -55,6 +59,7 @@ public class LimitsdemoApplication {
 						byte[][] mem = null;
 						if (memMB != null) {
 							mem = new byte[memMB][1024 * 1024];
+							memoryLeak.add(mem); // Evitar que el garbage colector libere la memoria
 							logger.info("Thread {}: Reservados {} MB de memoria.", Thread.currentThread().getName(), memMB);
 						}
 
