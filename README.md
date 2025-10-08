@@ -74,7 +74,7 @@ Este proyecto busca facilitar la comprensión y experimentación sobre cómo los
    ```
    --kubelet-insecure-tls
    ```
-   Nota: En esta versión se resuelve con kustomize con strategy `merge`.
+   > **Nota:**  En esta versión se resuelve con kustomize con strategy `merge`. No es necesario editar manualmente.
 
    Comprobar que metrics server se puede visualizar:
 
